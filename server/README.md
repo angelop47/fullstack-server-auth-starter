@@ -52,6 +52,23 @@ $$ language plpgsql security definer;
 create trigger on_auth_user_created
 after insert on auth.users
 for each row execute procedure public.handle_new_user();
+
+-- Sincronización de roles (public -> auth)
+create or replace function public.sync_user_role()
+returns trigger as $$
+begin
+  update auth.users
+  set raw_app_meta_data = raw_app_meta_data || jsonb_build_object('role', new.role)
+  where id = new.id;
+  return new;
+end;
+$$ language plpgsql security definer;
+
+create trigger on_role_change
+after update of role on public.users
+for each row
+when (old.role is distinct from new.role)
+execute procedure public.sync_user_role();
 ```
 
 ## Ejecutar
@@ -68,7 +85,9 @@ El servidor corre en `http://localhost:4000`
 
 ## API Endpoints
 
-### POST /auth/signup
+### 🔐 Autenticación
+
+#### POST /auth/signup
 
 Crear un nuevo usuario.
 
@@ -86,7 +105,7 @@ curl -X POST http://localhost:4000/auth/signup \
 }
 ```
 
-### POST /auth/login
+#### POST /auth/login
 
 Autenticarse y obtener token.
 
@@ -105,7 +124,7 @@ curl -X POST http://localhost:4000/auth/login \
 }
 ```
 
-### GET /auth/me
+#### GET /auth/me
 
 Obtener datos del usuario autenticado (requiere token).
 
@@ -114,17 +133,38 @@ curl -X GET http://localhost:4000/auth/me \
   -H "Authorization: Bearer <access_token>"
 ```
 
+### 👥 Usuarios (Gestión)
+
+#### PATCH /users/:id
+
+Actualizar información de un usuario.
+⚠️ **Requiere Rol 'admin'**
+
+```bash
+curl -X PATCH http://localhost:4000/users/<USER_ID> \
+  -H "Authorization: Bearer <ADMIN_ACCESS_TOKEN>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "full_name": "Updated Name",
+    "role": "admin"
+  }'
+```
+
 **Response:**
 ```json
 {
   "id": "uuid",
   "email": "user@example.com",
-  "role": "user"
+  "full_name": "Updated Name",
+  "role": "admin",
+  "avatar_url": null,
+  "created_at": "..."
 }
 ```
 
 ## Nota Importante
 
-Por defecto, Supabase requiere **confirmación de email**. Para desarrollo, puedes desactivarla en:
+1. Por defecto, Supabase requiere **confirmación de email**. Para desarrollo, puedes desactivarla en:
+   **Dashboard Supabase** → **Authentication** → **Providers** → **Email** → Desactiva "Confirm email"
 
-**Dashboard Supabase** → **Authentication** → **Providers** → **Email** → Desactiva "Confirm email"
+2. Para probar las rutas de administrador, debes actualizar manualmente el rol de un usuario en la tabla `public.users` a `'admin'` directamente en la base de datos de Supabase, ya que por defecto se crean como `'user'`.
