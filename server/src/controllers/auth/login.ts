@@ -5,6 +5,14 @@ import { supabase } from '../../config/supabase';
  * Inicia sesión con email y contraseña.
  * Utiliza Supabase Auth para validar credenciales y obtener tokens (access_token, refresh_token).
  * Retorna los datos del usuario junto con los tokens de sesión.
+ * 
+ * @example
+ * curl -X POST http://localhost:4000/auth/login \
+ *   -H "Content-Type: application/json" \
+ *   -d '{
+ *     "email": "juan@ejemplo.com",
+ *     "password": "password123"
+ *   }'
  */
 export async function login(req: Request, res: Response) {
     const { email, password } = req.body;

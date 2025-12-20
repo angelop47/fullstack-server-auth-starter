@@ -5,6 +5,13 @@ import { supabase } from '../../config/supabase';
  * Inicia el flujo de recuperación de contraseña.
  * Envía un correo electrónico al usuario con un enlace para restablecer su contraseña.
  * El enlace debe apuntar a una URL del frontend configurada en Supabase (Site URL / Redirect URLs).
+ * 
+ * @example
+ * curl -X POST http://localhost:4000/auth/forgot-password \
+ *   -H "Content-Type: application/json" \
+ *   -d '{
+ *     "email": "juan@ejemplo.com"
+ *   }'
  */
 export async function forgotPassword(req: Request, res: Response) {
     const { email } = req.body;

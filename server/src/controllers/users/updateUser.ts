@@ -7,6 +7,15 @@ import { AppUser } from '../../models/user.model';
  * Permite modificar `full_name`, `avatar_url` y `role`.
  * Actualiza la tabla `public.users`, lo cual dispara triggers para sincronizar roles.
  * Normalmente restringido a administradores.
+ * 
+ * @example
+ * curl -X PATCH http://localhost:4000/users/<USER_ID> \
+ *   -H "Content-Type: application/json" \
+ *   -H "Authorization: Bearer <ADMIN_ACCESS_TOKEN>" \
+ *   -d '{
+ *     "full_name": "Nuevo Nombre",
+ *     "role": "admin"
+ *   }'
  */
 export async function updateUser(req: Request, res: Response) {
     const { id } = req.params;

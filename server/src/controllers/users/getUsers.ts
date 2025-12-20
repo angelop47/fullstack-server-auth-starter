@@ -5,6 +5,10 @@ import { supabase } from '../../config/supabase';
  * Obtiene la lista de todos los usuarios registrados.
  * Consulta la tabla `public.users` (gestionada por triggers) para obtener datos de perfil.
  * Normalmente restringido a administradores (ver routes).
+ * 
+ * @example
+ * curl -X GET http://localhost:4000/users \
+ *   -H "Authorization: Bearer <ADMIN_ACCESS_TOKEN>"
  */
 export async function getUsers(req: Request, res: Response) {
     // 1. Consultar la tabla pública 'users'

@@ -5,6 +5,14 @@ import { supabase } from '../../config/supabase';
  * Restablece la contraseña del usuario autenticado.
  * Este endpoint se debe llamar DESPUÉS de que el usuario haya hecho click en el enlace del correo
  * y el frontend haya recuperado la sesión (access_token).
+ * 
+ * @example
+ * curl -X POST http://localhost:4000/auth/reset-password \
+ *   -H "Content-Type: application/json" \
+ *   -H "Authorization: Bearer <ACCESS_TOKEN>" \
+ *   -d '{
+ *     "password": "newSecurePassword123"
+ *   }'
  */
 export async function resetPassword(req: Request, res: Response) {
     const { password } = req.body;
