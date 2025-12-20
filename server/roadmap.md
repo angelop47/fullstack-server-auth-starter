@@ -5,10 +5,10 @@ Este documento describe el plan de implementación para convertir el proyecto en
 ## Fase 1: Seguridad y Recuperación de Accesos (Prioridad Alta)
 *Estas funcionalidades son críticas para evitar que los usuarios pierdan acceso a sus cuentas y para garantizar la seguridad básica.*
 
-- [ ] **Recuperación de Contraseña (Forgot Password)**
+- [x] **Recuperación de Contraseña (Forgot Password)**
     - Endpoint: `POST /api/auth/forgot-password`
     - Funcionalidad: Envía un correo electrónico con un enlace o token para resetear la contraseña.
-- [ ] **Restablecer Contraseña (Reset Password)**
+- [x] **Restablecer Contraseña (Reset Password)**
     - Endpoint: `POST /api/auth/reset-password`
     - Funcionalidad: Permite establecer una nueva contraseña utilizando el token recibido por correo.
 
