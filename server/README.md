@@ -19,12 +19,12 @@ npm install
 Crea un archivo `.env` basándote en `.env.example`:
 
 ```env
-PORT=4000
-SUPABASE_URL=https://tu-proyecto.supabase.co
-SUPABASE_SERVICE_ROLE_KEY=tu-service-role-key
+PORT=
+SUPABASE_URL=
+SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+FRONTEND_URL=
 ```
-
-> ⚠️ Usa el **Service Role Key** (no el anon key) para operaciones del servidor.
 
 ## Base de Datos
 
@@ -85,86 +85,78 @@ El servidor corre en `http://localhost:4000`
 
 ## API Endpoints
 
-### 🔐 Autenticación
+## 🔐 Autenticación
 
-#### POST /auth/signup
-
-Crear un nuevo usuario.
-
+### POST /api/auth/signup
+#### Crear un nuevo usuario.
 ```bash
-curl -X POST http://localhost:4000/auth/signup \
-  -H "Content-Type: application/json" \
-  -d '{"email":"user@example.com","password":"pass123","full_name":"John Doe"}'
-```
-
-**Response:**
-```json
-{
-  "user": { "id": "uuid", "email": "user@example.com", "full_name": "John Doe" },
-  "session": null
-}
-```
-
-#### POST /auth/login
-
-Autenticarse y obtener token.
-
-```bash
-curl -X POST http://localhost:4000/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email":"user@example.com","password":"pass123"}'
-```
-
-**Response:**
-```json
-{
-  "user": { "id": "uuid", "email": "user@example.com", "role": "user" },
-  "access_token": "eyJ...",
-  "refresh_token": "..."
-}
-```
-
-#### GET /auth/me
-
-Obtener datos del usuario autenticado (requiere token).
-
-```bash
-curl -X GET http://localhost:4000/auth/me \
-  -H "Authorization: Bearer <access_token>"
-```
-
-### 👥 Usuarios (Gestión)
-
-#### PATCH /users/:id
-
-Actualizar información de un usuario.
-⚠️ **Requiere Rol 'admin'**
-
-```bash
-curl -X PATCH http://localhost:4000/users/<USER_ID> \
-  -H "Authorization: Bearer <ADMIN_ACCESS_TOKEN>" \
+curl -X POST http://localhost:4000/api/auth/signup \
   -H "Content-Type: application/json" \
   -d '{
-    "full_name": "Updated Name",
-    "role": "admin"
+    "email": "juan@ejemplo.com",
+    "password": "password123",
+    "full_name": "Juan Perez"
   }'
 ```
 
-**Response:**
-```json
-{
-  "id": "uuid",
-  "email": "user@example.com",
-  "full_name": "Updated Name",
-  "role": "admin",
-  "avatar_url": null,
-  "created_at": "..."
-}
+### POST /api/auth/login
+#### Iniciar sesión.
+```bash
+curl -X POST http://localhost:4000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "juan@ejemplo.com",
+    "password": "password123"
+  }'
 ```
 
-## Nota Importante
+### GET /api/auth/me
+#### Obtener perfil del usuario actual (requiere token).
+```bash
+curl -X GET http://localhost:4000/api/auth/me \
+  -H "Authorization: Bearer <ACCESS_TOKEN>"
+```
 
-1. Por defecto, Supabase requiere **confirmación de email**. Para desarrollo, puedes desactivarla en:
-   **Dashboard Supabase** → **Authentication** → **Providers** → **Email** → Desactiva "Confirm email"
+### POST /api/auth/forgot-password
+#### Solicitar recuperación de contraseña.
+```bash
+curl -X POST http://localhost:4000/api/auth/forgot-password \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "juan@ejemplo.com"
+  }'
+```
 
-2. Para probar las rutas de administrador, debes actualizar manualmente el rol de un usuario en la tabla `public.users` a `'admin'` directamente en la base de datos de Supabase, ya que por defecto se crean como `'user'`.
+### POST /api/auth/reset-password
+#### Establecer nueva contraseña (requiere haberse validado con el token enviado por email).
+```bash
+curl -X POST http://localhost:4000/api/auth/reset-password \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <ACCESS_TOKEN>" \
+  -d '{
+    "password": "newSecurePassword123"
+  }'
+```
+
+---
+
+### 👥 Usuarios (Admin Only)
+
+#### GET /api/users
+#### Listar todos los usuarios.
+```bash
+curl -X GET http://localhost:4000/api/users \
+  -H "Authorization: Bearer <ADMIN_ACCESS_TOKEN>"
+```
+
+### PATCH /api/users/:id
+#### Actualizar un usuario específico.
+```bash
+curl -X PATCH http://localhost:4000/api/users/<USER_ID> \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <ADMIN_ACCESS_TOKEN>" \
+  -d '{
+    "full_name": "Nuevo Nombre",
+    "role": "admin"
+  }'
+```
