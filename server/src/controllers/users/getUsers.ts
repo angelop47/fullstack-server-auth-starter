@@ -7,7 +7,7 @@ import { supabase } from '../../config/supabase';
  * Normalmente restringido a administradores (ver routes).
  * 
  * @example
- * curl -X GET http://localhost:4000/users \
+ * curl -X GET http://localhost:4000/api/users \
  *   -H "Authorization: Bearer <ADMIN_ACCESS_TOKEN>"
  */
 export async function getUsers(req: Request, res: Response) {

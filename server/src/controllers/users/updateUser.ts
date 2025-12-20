@@ -9,7 +9,7 @@ import { AppUser } from '../../models/user.model';
  * Normalmente restringido a administradores.
  * 
  * @example
- * curl -X PATCH http://localhost:4000/users/<USER_ID> \
+ * curl -X PATCH http://localhost:4000/api/users/<USER_ID> \
  *   -H "Content-Type: application/json" \
  *   -H "Authorization: Bearer <ADMIN_ACCESS_TOKEN>" \
  *   -d '{

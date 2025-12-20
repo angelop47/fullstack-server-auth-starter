@@ -7,7 +7,7 @@ import { supabase } from '../../config/supabase';
  * Retorna el usuario creado y, dependiendo de la configuración de Supabase (confirmación de email), la sesión inicial.
  * 
  * @example
- * curl -X POST http://localhost:4000/auth/signup \
+ * curl -X POST http://localhost:4000/api/auth/signup \
  *   -H "Content-Type: application/json" \
  *   -d '{
  *     "email": "juan@ejemplo.com",

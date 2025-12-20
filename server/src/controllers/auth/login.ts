@@ -7,7 +7,7 @@ import { supabase } from '../../config/supabase';
  * Retorna los datos del usuario junto con los tokens de sesión.
  * 
  * @example
- * curl -X POST http://localhost:4000/auth/login \
+ * curl -X POST http://localhost:4000/api/auth/login \
  *   -H "Content-Type: application/json" \
  *   -d '{
  *     "email": "juan@ejemplo.com",

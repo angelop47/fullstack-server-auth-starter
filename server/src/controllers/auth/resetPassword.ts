@@ -7,7 +7,7 @@ import { supabase } from '../../config/supabase';
  * y el frontend haya recuperado la sesión (access_token).
  * 
  * @example
- * curl -X POST http://localhost:4000/auth/reset-password \
+ * curl -X POST http://localhost:4000/api/auth/reset-password \
  *   -H "Content-Type: application/json" \
  *   -H "Authorization: Bearer <ACCESS_TOKEN>" \
  *   -d '{

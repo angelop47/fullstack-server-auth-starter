@@ -7,7 +7,7 @@ import { supabase } from '../../config/supabase';
  * El enlace debe apuntar a una URL del frontend configurada en Supabase (Site URL / Redirect URLs).
  * 
  * @example
- * curl -X POST http://localhost:4000/auth/forgot-password \
+ * curl -X POST http://localhost:4000/api/auth/forgot-password \
  *   -H "Content-Type: application/json" \
  *   -d '{
  *     "email": "juan@ejemplo.com"

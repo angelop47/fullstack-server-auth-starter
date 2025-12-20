@@ -5,7 +5,7 @@ import { Request, Response } from 'express';
  * El usuario ya está disponible en `req.user` gracias al middleware de autenticación.
  * 
  * @example
- * curl -X GET http://localhost:4000/auth/me \
+ * curl -X GET http://localhost:4000/api/auth/me \
  *   -H "Authorization: Bearer <ACCESS_TOKEN>"
  */
 export function me(req: Request, res: Response) {
