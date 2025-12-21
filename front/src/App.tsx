@@ -1,8 +1,10 @@
 function App() {
 
   return (
-    <div>
-      <h1>Supabase Auth</h1>
+    <div className="flex justify-center items-center h-screen">
+      <h1 className="text-3xl font-bold underline">
+        Hello world!
+      </h1>
     </div>
   )
 }
