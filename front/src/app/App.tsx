@@ -1,22 +1,48 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from '../context/AuthContext';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from '../context/AuthContext';
 import Login from '../pages/auth/Login';
 import Dashboard from '../pages/dashboard/Dashboard';
+import NewUser from '../components/auth/NewUser';
 import ProtectedRoute from '../routes/ProtectedRoute';
+
+// Un pequeño componente para envolver rutas de admin
+const AdminRoute = ({ children }: { children: React.ReactElement }) => {
+  const { user } = useAuth();
+
+  if (user?.role !== 'admin') {
+    // Si no es admin, lo mandamos al dashboard normal
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return children;
+};
 
 function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
         <Routes>
+          {/* Rutas Públicas */}
           <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Navigate to="/dashboard" />} />
 
-          {/* Rutas Protegidas */}
+          {/* Grupo de Rutas Protegidas (Requieren Login) */}
           <Route element={<ProtectedRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
+
+            {/* Ruta específica para Admin */}
+            <Route
+              path="/admin/new-user"
+              element={
+                <AdminRoute>
+                  <NewUser />
+                </AdminRoute>
+              }
+            />
           </Route>
 
-          <Route path="/" element={<Login />} />
+          {/* 404 - Opcional */}
+          <Route path="*" element={<h2>Página no encontrada</h2>} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
