@@ -1,11 +1,18 @@
 import React, { useState, type ChangeEvent, type FormEvent } from 'react';
-import type { LoginResponse, ApiError } from '../../types/types'; // Importa tus interfaces
+import { useNavigate } from 'react-router-dom';
+import type { LoginResponse, ApiError } from '../../types/types';
+import { useAuth } from '../../context/AuthContext';
+import { Button } from '../ui/Button';
+import { Input } from '../ui/Input';
 
 const LoginForm: React.FC = () => {
     const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
+
+    const { login } = useAuth();
+    const navigate = useNavigate();
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -27,12 +34,11 @@ const LoginForm: React.FC = () => {
                 throw new Error(data.message || 'Error en la autenticación');
             }
 
-            // Al estar tipado, TS sabrá que data tiene access_token y user
-            localStorage.setItem('token', data.access_token);
-            localStorage.setItem('user', JSON.stringify(data.user));
+            // Update auth context
+            login(data.user, data.access_token);
 
-            console.log('Usuario logueado:', data.user.email);
-            alert(`Bienvenido, rol: ${data.user.role}`);
+            // Navigate to dashboard
+            navigate('/dashboard');
 
         } catch (err) {
             if (err instanceof Error) {
@@ -45,7 +51,6 @@ const LoginForm: React.FC = () => {
         }
     };
 
-    // Manejador genérico para los inputs
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         if (name === 'email') setEmail(value);
@@ -53,37 +58,36 @@ const LoginForm: React.FC = () => {
     };
 
     return (
-        <div className="login-container" style={{ maxWidth: '400px', margin: 'auto' }}>
-            <h1>Login</h1>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Email</label>
-                    <input
-                        type="email"
-                        name="email"
-                        value={email}
-                        onChange={handleInputChange}
-                        required
-                    />
-                </div>
-                <div>
-                    <label>Password</label>
-                    <input
-                        type="password"
-                        name="password"
-                        value={password}
-                        onChange={handleInputChange}
-                        required
-                    />
-                </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-300">Email</label>
+                <Input
+                    type="email"
+                    name="email"
+                    value={email}
+                    onChange={handleInputChange}
+                    placeholder="admin@example.com"
+                    required
+                />
+            </div>
+            <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-300">Password</label>
+                <Input
+                    type="password"
+                    name="password"
+                    value={password}
+                    onChange={handleInputChange}
+                    placeholder="••••••••"
+                    required
+                />
+            </div>
 
-                {error && <p style={{ color: 'red' }}>{error}</p>}
+            {error && <p className="text-sm text-red-400">{error}</p>}
 
-                <button type="submit" disabled={loading}>
-                    {loading ? 'Validando...' : 'Iniciar Sesión'}
-                </button>
-            </form>
-        </div>
+            <Button type="submit" className="w-full" disabled={loading}>
+                {loading ? 'Validando...' : 'Iniciar Sesión'}
+            </Button>
+        </form>
     );
 };
 
