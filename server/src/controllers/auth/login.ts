@@ -40,9 +40,26 @@ export async function login(req: Request, res: Response) {
         .eq('id', data.user.id)
         .single();
 
-    // 5. Retornar información del usuario y tokens de sesión
+    // 5. Retornar información del usuario y setear cookies
     // data.user contiene la info del usuario
     // data.session contiene los tokens (access_token, refresh_token)
+
+    const isProduction = process.env.NODE_ENV === 'production';
+
+    res.cookie('access_token', data.session.access_token, {
+        httpOnly: true,
+        secure: isProduction,
+        sameSite: 'strict',
+        maxAge: data.session.expires_in * 1000, // Supabase devuelve segundos
+    });
+
+    res.cookie('refresh_token', data.session.refresh_token, {
+        httpOnly: true,
+        secure: isProduction,
+        sameSite: 'strict',
+        maxAge: 30 * 24 * 60 * 60 * 1000, // 30 días aprox
+    });
+
     res.json({
         user: {
             id: data.user.id,
@@ -51,7 +68,5 @@ export async function login(req: Request, res: Response) {
             full_name: profile?.full_name,
             avatar_url: profile?.avatar_url,
         },
-        access_token: data.session.access_token,
-        refresh_token: data.session.refresh_token,
     });
 }
