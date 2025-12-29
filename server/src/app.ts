@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
+import cookieParser from 'cookie-parser';
 import { env } from './config/env';
 import authRoutes from './routes/auth.routes';
 import userRoutes from './routes/users.routes';
@@ -16,6 +17,7 @@ app.use(cors(
     }
 ));
 app.use(express.json());
+app.use(cookieParser());
 
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
