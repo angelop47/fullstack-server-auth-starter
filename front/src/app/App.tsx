@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from '../context/AuthContext';
 import Login from '../pages/auth/Login';
 import Dashboard from '../pages/dashboard/Dashboard';
-import NewUser from '../components/auth/NewUser';
+import NewUser from '../pages/auth/NewUser';
 import Profile from '../pages/profile/Profile';
 import ProtectedRoute from '../routes/ProtectedRoute';
 import Navbar from '../components/ui/Navbar';
