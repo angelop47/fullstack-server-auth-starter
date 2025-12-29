@@ -48,42 +48,40 @@ const NewUser: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="space-y-2">
-        <label className="text-sm font-medium text-gray-300">
-          Nombre Completo
-        </label>
+    <form onSubmit={handleSubmit} className='space-y-4'>
+      <div className='space-y-2'>
+        <label className='text-sm font-medium text-gray-300'>Nombre Completo</label>
         <Input
-          name="full_name"
-          type="text"
+          name='full_name'
+          type='text'
           value={formData.full_name}
           onChange={handleChange}
           required
-          placeholder="Juan Pérez"
+          placeholder='Juan Pérez'
         />
       </div>
 
-      <div className="space-y-2">
-        <label className="text-sm font-medium text-gray-300">Email</label>
+      <div className='space-y-2'>
+        <label className='text-sm font-medium text-gray-300'>Email</label>
         <Input
-          name="email"
-          type="email"
+          name='email'
+          type='email'
           value={formData.email}
           onChange={handleChange}
           required
-          placeholder="juan@example.com"
+          placeholder='juan@example.com'
         />
       </div>
 
-      <div className="space-y-2">
-        <label className="text-sm font-medium text-gray-300">Contraseña</label>
+      <div className='space-y-2'>
+        <label className='text-sm font-medium text-gray-300'>Contraseña</label>
         <Input
-          name="password"
-          type="password"
+          name='password'
+          type='password'
           value={formData.password}
           onChange={handleChange}
           required
-          placeholder="••••••••"
+          placeholder='••••••••'
         />
       </div>
 
@@ -99,7 +97,7 @@ const NewUser: React.FC = () => {
         </div>
       )}
 
-      <Button type="submit" className="w-full" disabled={loading || !token}>
+      <Button type='submit' className='w-full' disabled={loading || !token}>
         {loading ? 'Procesando...' : 'Crear Usuario'}
       </Button>
     </form>

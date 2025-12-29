@@ -13,7 +13,7 @@ const AdminRoute = ({ children }: { children: React.ReactElement }) => {
 
   if (user?.role !== 'admin') {
     // Si no es admin, lo mandamos al dashboard normal
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to='/dashboard' replace />;
   }
 
   return children;
@@ -27,17 +27,17 @@ function App() {
         <BrowserRouter>
           <Routes>
             {/* Rutas Públicas */}
-            <Route path="/login" element={<Login />} />
-            <Route path="/" element={<Navigate to="/dashboard" />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/' element={<Navigate to='/dashboard' />} />
 
             {/* Grupo de Rutas Protegidas (Requieren Login) */}
             <Route element={<ProtectedRoute />}>
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/profile" element={<Profile />} />
+              <Route path='/dashboard' element={<Dashboard />} />
+              <Route path='/profile' element={<Profile />} />
 
               {/* Ruta específica para Admin */}
               <Route
-                path="/admin/new-user"
+                path='/admin/new-user'
                 element={
                   <AdminRoute>
                     <NewUser />
@@ -47,7 +47,7 @@ function App() {
             </Route>
 
             {/* 404 - Opcional */}
-            <Route path="*" element={<h2>Página no encontrada</h2>} />
+            <Route path='*' element={<h2>Página no encontrada</h2>} />
           </Routes>
         </BrowserRouter>
       </AuthProvider>

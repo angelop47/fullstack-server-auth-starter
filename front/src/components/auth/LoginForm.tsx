@@ -45,33 +45,33 @@ const LoginForm: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="space-y-2">
-        <label className="text-sm font-medium text-gray-300">Email</label>
+    <form onSubmit={handleSubmit} className='space-y-4'>
+      <div className='space-y-2'>
+        <label className='text-sm font-medium text-gray-300'>Email</label>
         <Input
-          type="email"
-          name="email"
+          type='email'
+          name='email'
           value={email}
           onChange={handleInputChange}
-          placeholder="admin@example.com"
+          placeholder='admin@example.com'
           required
         />
       </div>
-      <div className="space-y-2">
-        <label className="text-sm font-medium text-gray-300">Password</label>
+      <div className='space-y-2'>
+        <label className='text-sm font-medium text-gray-300'>Password</label>
         <Input
-          type="password"
-          name="password"
+          type='password'
+          name='password'
           value={password}
           onChange={handleInputChange}
-          placeholder="••••••••"
+          placeholder='••••••••'
           required
         />
       </div>
 
-      {error && <p className="text-sm text-red-400">{error}</p>}
+      {error && <p className='text-sm text-red-400'>{error}</p>}
 
-      <Button type="submit" className="w-full" disabled={loading}>
+      <Button type='submit' className='w-full' disabled={loading}>
         {loading ? 'Validando...' : 'Iniciar Sesión'}
       </Button>
     </form>

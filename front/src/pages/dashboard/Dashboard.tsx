@@ -15,8 +15,7 @@ const Dashboard: React.FC = () => {
           <strong>Email:</strong> {user?.email}
         </p>
         <p>
-          <strong>Rol:</strong>{' '}
-          <span style={{ color: 'blue' }}>{user?.role}</span>
+          <strong>Rol:</strong> <span style={{ color: 'blue' }}>{user?.role}</span>
         </p>
       </div>
     </div>

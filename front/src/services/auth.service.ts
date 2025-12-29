@@ -1,9 +1,4 @@
-import type {
-  LoginResponse,
-  NewUserPayload,
-  NewUserResponse,
-  ApiError,
-} from '../types/types';
+import type { LoginResponse, NewUserPayload, NewUserResponse, ApiError } from '../types/types';
 
 const API_URL = 'http://localhost:4000/api/auth';
 
