@@ -1,4 +1,4 @@
-import type { LoginResponse, NewUserPayload, NewUserResponse, ApiError } from '../types/types';
+import type { LoginResponse, NewUserPayload, NewUserResponse, ApiError, User } from '../types/types';
 
 const API_URL = 'http://localhost:4000/api/auth';
 
@@ -10,6 +10,7 @@ export const authService = {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ email, password }),
+      credentials: 'include', // Importante para recibir cookies
     });
 
     const data = await response.json();
@@ -19,34 +20,55 @@ export const authService = {
       throw new Error(error.message || 'Error en la autenticación');
     }
 
+    // Ya no retornamos tokens, solo el usuario
     return data as LoginResponse;
+  },
+
+  logout: async (): Promise<void> => {
+    await fetch(`${API_URL}/logout`, {
+      method: 'POST',
+      credentials: 'include',
+    });
+  },
+
+  getCurrentUser: async (): Promise<User | null> => {
+    try {
+      const response = await fetch(`${API_URL}/me`, {
+        method: 'GET',
+        credentials: 'include',
+      });
+
+      if (!response.ok) {
+        return null; // Si falla (401), no hay usuario
+      }
+
+      const data = await response.json();
+      return data.user; // Asumiendo que /me retorna { user: ... }
+    } catch (error) {
+      return null;
+    }
   },
 
   createNewUser: async (
     payload: NewUserPayload,
-    token: string | null,
   ): Promise<NewUserResponse> => {
-    if (!token) {
-      throw new Error('No hay sesión activa');
-    }
-
+    // Ya no necesitamos pasar el token manualmente, el navegador lo envía en la cookie
     const response = await fetch(`${API_URL}/new-user`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(payload),
+      credentials: 'include',
     });
 
     const data = await response.json();
 
     if (!response.ok) {
-      const error = data as ApiError; // Assuming ApiError shape for error responses
-      throw new Error(error.message || 'Error al crear el usuario'); // data.message might be direct
+      const error = data as ApiError;
+      throw new Error(error.message || 'Error al crear el usuario');
     }
 
-    // The endpoint returns a message and potentially user data
     return data as NewUserResponse;
   },
 };

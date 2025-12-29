@@ -8,8 +8,6 @@ export interface User {
 
 export interface LoginResponse {
   user: User;
-  access_token: string;
-  refresh_token: string;
 }
 
 export interface ApiError {
