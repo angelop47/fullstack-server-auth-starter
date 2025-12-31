@@ -11,7 +11,6 @@ export async function authMiddleware(
   res: Response,
   next: NextFunction,
 ) {
-  // 1. Obtener el header Authorization
   // 1. Obtener el token de las cookies o del header Authorization
   let token = req.cookies?.access_token;
 
@@ -19,19 +18,20 @@ export async function authMiddleware(
     token = req.headers.authorization.split(' ')[1];
   }
 
+  // 2. Verificar que el token esté presente
   if (!token) {
     return res.status(401).json({ error: 'Token missing' });
   }
 
-  // 4. Validar el token con Supabase Auth
+  // 3. Validar el token con Supabase Auth
   const { data, error } = await supabase.auth.getUser(token);
 
-  // 5. Si hay error o no hay usuario, retornar 401 Unauthorized
+  // 4. Si hay error o no hay usuario, retornar 401 Unauthorized
   if (error || !data.user) {
     return res.status(401).json({ error: 'Invalid token' });
   }
 
-  // 6. Adjuntar el usuario al request y continuar
+  // 5. Adjuntar el usuario al request y continuar
   req.user = data.user;
   next();
 }

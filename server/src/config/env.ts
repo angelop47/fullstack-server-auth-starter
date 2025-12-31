@@ -1,8 +1,11 @@
 import 'dotenv/config';
 
+/**
+ * Valida que todas las variables de entorno requeridas estén presentes.
+ * Lanza un error si falta alguna variable crítica.
+ */
 function validateEnv() {
   const required = [
-    'SUPABASE_URL',
     'SUPABASE_URL',
     'SUPABASE_SERVICE_ROLE_KEY',
     'SUPABASE_ANON_KEY',
@@ -17,6 +20,9 @@ function validateEnv() {
 
 validateEnv();
 
+/**
+ * Objeto de configuración de la aplicación con todas las variables de entorno tipadas.
+ */
 export const env = {
   port: process.env.PORT || 4000,
   supabaseUrl: process.env.SUPABASE_URL!,
