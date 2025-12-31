@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useAuth } from '../../context/AuthContext';
 import type { NewUserPayload } from '../../types/types';
 import { authService } from '../../services/auth.service';
 import { Button } from '../ui/Button';
