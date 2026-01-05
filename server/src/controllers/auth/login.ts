@@ -44,19 +44,22 @@ export async function login(req: Request, res: Response) {
     // data.user contiene la info del usuario
     // data.session contiene los tokens (access_token, refresh_token)
 
-    const isProduction = process.env.NODE_ENV === 'production';
-
-    res.cookie('access_token', data.session.access_token, {
+    // Si NODE_ENV no está definido, asumimos producción (seguro) para evitar errores en despliegues.
+    // Solo usamos 'lax' si explícitamente estamos en 'development'.
+    const isDevelopment = process.env.NODE_ENV === 'development';
+    const cookieOptions = {
         httpOnly: true,
-        secure: isProduction, // En produccion debe ser true
-        sameSite: isProduction ? 'none' : 'lax', // En produccion 'none' para cross-origin
+        // En desarrollo (localhost sin https) secure: false. En cualquier otro caso (prod/undefined): true
+        secure: !isDevelopment,
+        // En desarrollo 'lax' (mismo dominio). En prod (cross-origin): 'none'
+        sameSite: isDevelopment ? 'lax' : 'none' as 'lax' | 'none' | 'strict',
         maxAge: data.session.expires_in * 1000,
-    });
+    };
+
+    res.cookie('access_token', data.session.access_token, cookieOptions);
 
     res.cookie('refresh_token', data.session.refresh_token, {
-        httpOnly: true,
-        secure: isProduction,
-        sameSite: isProduction ? 'none' : 'lax',
+        ...cookieOptions,
         maxAge: 30 * 24 * 60 * 60 * 1000, // 30 días aprox
     });
 
