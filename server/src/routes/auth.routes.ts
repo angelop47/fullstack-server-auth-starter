@@ -35,10 +35,10 @@ const router = Router();
  */
 
 // Rutas de autenticación
-router.post('/login', authLimiter, login);
+router.post('/login', login);
 // router.post('/signup', authLimiter, signup); // Registro público (deshabilitado)
 router.post('/new-user', authMiddleware, requireAdmin, signup); // Registro restringido a admins
-router.post('/forgot-password', authLimiter, forgotPassword);
+router.post('/forgot-password', forgotPassword);
 router.post('/reset-password', authMiddleware, resetPassword);
 router.post('/logout', logout);
 router.get('/me', authMiddleware, me);
