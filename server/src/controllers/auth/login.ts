@@ -46,17 +46,23 @@ export async function login(req: Request, res: Response) {
 
     const isProduction = process.env.NODE_ENV === 'production';
 
+    console.log('[LOGIN] Setting cookies with params:', {
+        secure: true,
+        sameSite: 'none',
+        NODE_ENV: process.env.NODE_ENV
+    });
+
     res.cookie('access_token', data.session.access_token, {
         httpOnly: true,
-        secure: isProduction,
-        sameSite: isProduction ? 'none' : 'lax', // 'none' permite cross-origin en prod (requiere secure: true)
+        secure: true, // Force secure for testing
+        sameSite: 'none', // Force none for testing cross-origin
         maxAge: data.session.expires_in * 1000,
     });
 
     res.cookie('refresh_token', data.session.refresh_token, {
         httpOnly: true,
-        secure: isProduction,
-        sameSite: isProduction ? 'none' : 'lax',
+        secure: true,
+        sameSite: 'none',
         maxAge: 30 * 24 * 60 * 60 * 1000, // 30 días aprox
     });
 

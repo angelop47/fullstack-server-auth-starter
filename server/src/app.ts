@@ -13,9 +13,6 @@ const app = express();
 // Configuración de seguridad HTTP
 app.use(helmet());
 
-// Confía en el proxy (necesario para Koyeb/Heroku/AWS cuando se usa secure cookies)
-app.set('trust proxy', 1);
-
 // Configuración de CORS
 app.use(cors({
     origin: env.corsOrigin,
