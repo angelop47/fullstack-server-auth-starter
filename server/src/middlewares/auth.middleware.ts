@@ -12,9 +12,6 @@ export async function authMiddleware(
   next: NextFunction,
 ) {
   // 1. Obtener el token de las cookies o del header Authorization
-  console.log('[AUTH MIDDLEWARE] Headers:', req.headers);
-  console.log('[AUTH MIDDLEWARE] Cookies:', req.cookies);
-
   let token = req.cookies?.access_token;
 
   if (!token && req.headers.authorization?.startsWith('Bearer ')) {
