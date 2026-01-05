@@ -27,7 +27,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Rutas de la API con Rate Limiting
-app.use('/api/auth', authLimiter, authRoutes);
+app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 
 // Middleware de manejo de errores (siempre al final)
