@@ -1,10 +1,9 @@
-import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import { createContext, useContext, type ReactNode } from 'react';
 import type { User } from '../types/types';
-import { authService } from '../services/auth.service';
+import { useUserQuery, useLogoutMutation } from '../hooks/useAuthQueries';
 
 interface AuthContextType {
   user: User | null;
-  login: (user: User) => void;
   logout: () => void;
   loading: boolean;
 }
@@ -12,35 +11,15 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const checkSession = async () => {
-      try {
-        const user = await authService.getCurrentUser();
-        setUser(user);
-      } catch (error) {
-        setUser(null);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    checkSession();
-  }, []);
-
-  const login = (userData: User) => {
-    setUser(userData);
-  };
+  const { data: user, isLoading: loading } = useUserQuery();
+  const logoutMutation = useLogoutMutation();
 
   const logout = () => {
-    authService.logout();
-    setUser(null);
+    logoutMutation.mutate();
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider value={{ user: user ?? null, logout, loading }}>
       {!loading && children}
     </AuthContext.Provider>
   );
