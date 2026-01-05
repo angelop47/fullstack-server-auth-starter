@@ -49,14 +49,14 @@ export async function login(req: Request, res: Response) {
     res.cookie('access_token', data.session.access_token, {
         httpOnly: true,
         secure: isProduction,
-        sameSite: 'strict',
-        maxAge: data.session.expires_in * 1000, // Supabase devuelve segundos
+        sameSite: isProduction ? 'none' : 'lax', // 'none' permite cross-origin en prod (requiere secure: true)
+        maxAge: data.session.expires_in * 1000,
     });
 
     res.cookie('refresh_token', data.session.refresh_token, {
         httpOnly: true,
         secure: isProduction,
-        sameSite: 'strict',
+        sameSite: isProduction ? 'none' : 'lax',
         maxAge: 30 * 24 * 60 * 60 * 1000, // 30 días aprox
     });
 
