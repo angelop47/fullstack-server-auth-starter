@@ -1,23 +1,31 @@
-import React, { useState, type ChangeEvent, type FormEvent } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useLoginMutation } from '../../hooks/useAuthQueries';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
+import { loginSchema, type LoginFormData } from '../../schemas/auth.schema';
 
 const LoginForm: React.FC = () => {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+  });
 
   const loginMutation = useLoginMutation();
   const navigate = useNavigate();
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const onSubmit = (data: LoginFormData) => {
     setError(null);
 
     loginMutation.mutate(
-      { email, password },
+      { email: data.email, password: data.password },
       {
         onSuccess: () => {
           navigate('/dashboard');
@@ -33,35 +41,29 @@ const LoginForm: React.FC = () => {
     );
   };
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    if (name === 'email') setEmail(value);
-    if (name === 'password') setPassword(value);
-  };
-
   return (
-    <form onSubmit={handleSubmit} className='space-y-4'>
+    <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
       <div className='space-y-2'>
         <label className='text-sm font-medium text-gray-300'>Email</label>
         <Input
           type='email'
-          name='email'
-          value={email}
-          onChange={handleInputChange}
           placeholder='admin@example.com'
-          required
+          {...register('email')}
         />
+        {errors.email && (
+          <p className='text-xs text-red-400'>{errors.email.message}</p>
+        )}
       </div>
       <div className='space-y-2'>
         <label className='text-sm font-medium text-gray-300'>Password</label>
         <Input
           type='password'
-          name='password'
-          value={password}
-          onChange={handleInputChange}
           placeholder='••••••••'
-          required
+          {...register('password')}
         />
+        {errors.password && (
+          <p className='text-xs text-red-400'>{errors.password.message}</p>
+        )}
       </div>
 
       {error && <p className='text-sm text-red-400'>{error}</p>}

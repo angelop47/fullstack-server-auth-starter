@@ -64,5 +64,6 @@ Las alertas actuales son mensajes de texto simples.
 
 1.  **Inmediato**: Extraer la URL de la API a variables de entorno. ✅ **(Completado)**
 2.  **Corto Plazo**: Implementar **React Query** para limpiar la lógica de fetching y mejorar la UX. ✅ **(Completado)**
-3.  **Medio Plazo**: Migrar el almacenamiento de tokens de `localStorage` a un flujo más seguro (cookies o memoria con refresh silencioso).
-4.  **Largo Plazo**: Implementar suite de tests automatizados.
+3.  **Medio Plazo**: Migrar el almacenamiento de tokens de `localStorage` a un flujo más seguro (cookies o memoria con refresh silencioso). ✅ **(Completado: backend usa HttpOnly cookies)**
+4.  **Medio Plazo**: Implementar validación de inputs con **Zod**. ✅ **(Completado)**
+5.  **Largo Plazo**: Implementar suite de tests automatizados.

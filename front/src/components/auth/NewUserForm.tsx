@@ -1,18 +1,12 @@
 import React, { useState } from 'react';
-import type { NewUserPayload } from '../../types/types';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { authService } from '../../services/auth.service';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
+import { newUserSchema, type NewUserFormData } from '../../schemas/auth.schema';
 
 const NewUser: React.FC = () => {
-  // const { user } = useAuth(); 
-  // No necesitamos user explícitamente aquí si no hay lógica condicional de UI basada en roles en este componente
-  const [formData, setFormData] = useState<NewUserPayload>({
-    email: '',
-    password: '',
-    full_name: '',
-  });
-
   const [status, setStatus] = useState<{
     type: 'success' | 'error' | null;
     msg: string;
@@ -22,23 +16,24 @@ const NewUser: React.FC = () => {
   });
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<NewUserFormData>({
+    resolver: zodResolver(newUserSchema),
+  });
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: NewUserFormData) => {
     setLoading(true);
     setStatus({ type: null, msg: '' });
 
     try {
-      await authService.createNewUser(formData);
+      await authService.createNewUser(data);
 
       setStatus({ type: 'success', msg: '¡Usuario creado exitosamente!' });
-      setFormData({ email: '', password: '', full_name: '' });
+      reset();
     } catch (err) {
       const error = err as Error;
       setStatus({ type: 'error', msg: error.message });
@@ -48,41 +43,40 @@ const NewUser: React.FC = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className='space-y-4'>
+    <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
       <div className='space-y-2'>
         <label className='text-sm font-medium text-gray-300'>Nombre Completo</label>
         <Input
-          name='full_name'
-          type='text'
-          value={formData.full_name}
-          onChange={handleChange}
-          required
           placeholder='Juan Pérez'
+          {...register('full_name')}
         />
+        {errors.full_name && (
+          <p className='text-xs text-red-400'>{errors.full_name.message}</p>
+        )}
       </div>
 
       <div className='space-y-2'>
         <label className='text-sm font-medium text-gray-300'>Email</label>
         <Input
-          name='email'
           type='email'
-          value={formData.email}
-          onChange={handleChange}
-          required
           placeholder='juan@example.com'
+          {...register('email')}
         />
+        {errors.email && (
+          <p className='text-xs text-red-400'>{errors.email.message}</p>
+        )}
       </div>
 
       <div className='space-y-2'>
         <label className='text-sm font-medium text-gray-300'>Contraseña</label>
         <Input
-          name='password'
           type='password'
-          value={formData.password}
-          onChange={handleChange}
-          required
           placeholder='••••••••'
+          {...register('password')}
         />
+        {errors.password && (
+          <p className='text-xs text-red-400'>{errors.password.message}</p>
+        )}
       </div>
 
       {status.msg && (
@@ -104,3 +98,4 @@ const NewUser: React.FC = () => {
 };
 
 export default NewUser;
+
