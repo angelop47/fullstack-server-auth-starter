@@ -12,6 +12,7 @@ export const authLimiter = rateLimit({
     },
     standardHeaders: true,
     legacyHeaders: false,
+    skipSuccessfulRequests: true, // Solo cuenta intentos fallidos
 });
 
 /**

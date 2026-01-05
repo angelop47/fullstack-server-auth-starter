@@ -10,6 +10,9 @@ import { errorMiddleware } from './middlewares/error.middleware';
 
 const app = express();
 
+// Configuración de confianza en proxy (necesario para rate limiting correcto detrás de balanceadores)
+app.set('trust proxy', env.trustProxy);
+
 // Configuración de seguridad HTTP
 app.use(helmet());
 

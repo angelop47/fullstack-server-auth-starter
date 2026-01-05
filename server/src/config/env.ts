@@ -29,4 +29,5 @@ export const env = {
   supabaseServiceKey: process.env.SUPABASE_SERVICE_ROLE_KEY!,
   supabaseAnonKey: process.env.SUPABASE_ANON_KEY!,
   corsOrigin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : true,
+  trustProxy: process.env.TRUST_PROXY ? parseInt(process.env.TRUST_PROXY) : 1,
 };
