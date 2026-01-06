@@ -22,6 +22,8 @@ export default function Navbar() {
   const navigation = [
     // Show Dashboard if user is logged in
     ...(user ? [{ name: 'Dashboard', href: '/dashboard' }] : []),
+    // Show Users if user is admin
+    ...(user?.role === 'admin' ? [{ name: 'Users', href: '/admin/users' }] : []),
     // Show New User if user is admin
     ...(user?.role === 'admin' ? [{ name: 'New User', href: '/admin/new-user' }] : []),
     // Show Login if user is NOT logged in

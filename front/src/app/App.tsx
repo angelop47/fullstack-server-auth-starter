@@ -4,6 +4,7 @@ import Login from '../pages/auth/Login';
 import Dashboard from '../pages/dashboard/Dashboard';
 import NewUser from '../pages/auth/NewUser';
 import Profile from '../pages/profile/Profile';
+import UsersPage from '../pages/users/UsersPage';
 import ProtectedRoute from '../routes/ProtectedRoute';
 import Navbar from '../components/ui/Navbar';
 
@@ -41,6 +42,14 @@ function App() {
                 element={
                   <AdminRoute>
                     <NewUser />
+                  </AdminRoute>
+                }
+              />
+              <Route
+                path='/admin/users'
+                element={
+                  <AdminRoute>
+                    <UsersPage />
                   </AdminRoute>
                 }
               />
