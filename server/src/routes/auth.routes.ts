@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { signup, login, me, forgotPassword, resetPassword, logout } from '../controllers/auth';
+import { login, me, forgotPassword, resetPassword, logout, newUser } from '../controllers/auth';
 import { authMiddleware } from '../middlewares/auth.middleware';
 import { authLimiter } from '../middlewares/rate-limit.middleware';
 import { requireAdmin } from '../middlewares/role.middleware';
@@ -37,7 +37,7 @@ const router = Router();
 // Rutas de autenticación
 router.post('/login', authLimiter, login);
 // router.post('/signup', authLimiter, signup); // Registro público (deshabilitado)
-router.post('/new-user', authMiddleware, requireAdmin, signup); // Registro restringido a admins
+router.post('/new-user', authMiddleware, requireAdmin, newUser); // Registro restringido a admins
 router.post('/forgot-password', authLimiter, forgotPassword);
 router.post('/reset-password', authLimiter, authMiddleware, resetPassword);
 router.post('/logout', logout);
