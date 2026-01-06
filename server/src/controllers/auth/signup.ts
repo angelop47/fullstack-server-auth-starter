@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
+import { createClient } from '@supabase/supabase-js';
 import { supabase } from '../../config/supabase';
+import { env } from '../../config/env';
 
 /**
  * Registra un nuevo usuario en Supabase Auth.
@@ -24,8 +26,11 @@ export async function signup(req: Request, res: Response) {
     }
 
     // 2. Crear usuario en Supabase Auth
+    // IMPORTANTE: Usamos un cliente temporal para no iniciar sesión en el cliente global (Admin)
+    const tempSupabase = createClient(env.supabaseUrl, env.supabaseAnonKey);
+
     // 'options.data' permite guardar metadatos extra como full_name en la tabla auth.users
-    const { data, error } = await supabase.auth.signUp({
+    const { data, error } = await tempSupabase.auth.signUp({
         email,
         password,
         options: {

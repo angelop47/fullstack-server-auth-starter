@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
+import { createClient } from '@supabase/supabase-js';
 import { supabase } from '../../config/supabase';
+import { env } from '../../config/env';
 
 /**
  * Inicia sesión con email y contraseña.
@@ -23,7 +25,11 @@ export async function login(req: Request, res: Response) {
     }
 
     // 2. Intentar iniciar sesión usando Supabase Auth
-    const { data, error } = await supabase.auth.signInWithPassword({
+    // IMPORTANTE: Creamos un cliente TEMPORAL para no contaminar el cliente global de admin con la sesión del usuario.
+    // Usamos la Anon Key porque el login es una operación pública/de usuario.
+    const tempSupabase = createClient(env.supabaseUrl, env.supabaseAnonKey);
+
+    const { data, error } = await tempSupabase.auth.signInWithPassword({
         email,
         password,
     });
@@ -34,6 +40,7 @@ export async function login(req: Request, res: Response) {
     }
 
     // 4. Obtener información adicional del perfil usuario desde la tabla public.users
+    // Aquí usamos el cliente 'supabase' global (Service Role) para tener permisos de lectura.
     const { data: profile } = await supabase
         .from('users')
         .select('*')
