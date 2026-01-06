@@ -1,6 +1,7 @@
-export { signup } from './signup';
-export { login } from './login';
-export { me } from './me';
-export { forgotPassword } from './forgotPassword';
-export { resetPassword } from './resetPassword';
-export { logout } from './logout';
+export * from './login';
+export * from './signup';
+export * from './newUser';
+export * from './logout';
+export * from './me';
+export * from './forgotPassword';
+export * from './resetPassword';
